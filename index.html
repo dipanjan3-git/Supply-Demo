@@ -66,9 +66,9 @@
   .nav a.active .t{color:var(--pine-dark)}
   .nav a .f{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);margin-top:2px;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .nav a.home .f{display:none}
-  .nav .none{padding:16px 12px;color:var(--muted);font-size:13px;display:none}
-  .nav .none.show{display:block}
+  .nav a.nav-home .f{display:none}
+  .navwrap .none{padding:16px 12px;color:var(--muted);font-size:13px;display:none}
+  .navwrap .none.show{display:block}
 
   .foot{padding:12px 22px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;
     font-size:11px;color:var(--faint)}
@@ -239,7 +239,7 @@
 
   // sidebar: Home item + page items
   nav.innerHTML =
-    `<a href="#" class="home" data-file="__home__" data-search="home"><div class="t">Home</div></a>`
+    `<a href="#" class="nav-home" data-file="__home__" data-search="home"><div class="t">Home</div></a>`
     + `<div class="navlabel">Pages</div>`
     + PAGES.map(p=>`
       <a href="#${encodeURIComponent(p.file)}" data-file="${esc(p.file)}"
