@@ -13,12 +13,12 @@
      marked "EDIT THIS LIST". Nothing else needs touching.
      ========================================================= */
   :root{
-    /* palette matched to the demo pages (navy/blue slate) */
-    --paper:#F4F6F9;--panel:#FFFFFF;--card:#FFFFFF;
-    --ink:#0F2A43;--muted:#5A6B7D;--faint:#9AA8B6;
-    --line:#DCE3EC;--line-2:#C7D3E0;
-    --pine:#0A4FA8;--pine-dark:#083E85;--pine-tint:#E8F1FB;  /* brand navy + tint */
-    --gold:#1AA8E8;--sb:288px;                                /* bright-blue highlight */
+    /* dark slate/navy palette matched to the demos' default (dark) theme */
+    --paper:#0A0E1A;--panel:#0F172A;--card:#1E293B;
+    --ink:#F1F5F9;--muted:#94A3B8;--faint:#64748B;
+    --line:#334155;--line-2:#3E4C61;
+    --pine:#1AA8E8;--pine-dark:#7DD3FC;--pine-tint:#17304A;  /* bright-blue accent + tint */
+    --gold:#5BCAEF;--sb:288px;                                /* light-blue highlight */
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
@@ -31,7 +31,9 @@
 
   /* ---------------- sidebar ---------------- */
   .sidebar{width:var(--sb);flex:none;height:100vh;background:var(--panel);
-    border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:40}
+    border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:40;
+    transition:width .2s ease}
+  body.collapsed .sidebar{width:0;border-right-width:0;overflow:hidden}
   .brand{padding:22px 22px 16px;display:flex;align-items:center;gap:11px;cursor:pointer}
   .brand .mark{width:34px;height:34px;border-radius:9px;flex:none;background:var(--pine);
     position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
@@ -48,7 +50,7 @@
     border:1px solid var(--line-2);border-radius:9px;padding:11px 12px 11px 36px;
     transition:border-color .15s,box-shadow .15s}
   #q::placeholder{color:var(--faint)}
-  #q:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(31,111,92,.12)}
+  #q:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(26,168,232,.25)}
   .search .mag{position:absolute;left:28px;top:15px;width:16px;height:16px;stroke:var(--muted);
     fill:none;stroke-width:2;pointer-events:none}
   .search .kbd{position:absolute;right:26px;top:13px;font-family:'JetBrains Mono',monospace;
@@ -80,6 +82,11 @@
   .hamb{display:none;width:38px;height:38px;border:1px solid var(--line-2);border-radius:8px;
     background:var(--panel);cursor:pointer;align-items:center;justify-content:center;flex:none}
   .hamb svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2}
+  .collapse-btn{display:inline-flex;width:38px;height:38px;border:1px solid var(--line-2);
+    border-radius:8px;background:var(--panel);cursor:pointer;align-items:center;
+    justify-content:center;flex:none;transition:border-color .13s}
+  .collapse-btn:hover{border-color:var(--pine)}
+  .collapse-btn svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2;fill:none}
   .viewbar .now{font-weight:600;font-size:15px;min-width:0;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap}
   .viewbar .now .nf{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);
@@ -93,7 +100,7 @@
   .viewbar .btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
 
   .stage{flex:1;position:relative;background:var(--paper)}
-  #frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}
+  #frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--paper);display:none}
   #frame.show{display:block}
 
   /* ---------------- home screen ---------------- */
@@ -116,7 +123,7 @@
     border-radius:14px;padding:20px 20px 16px;min-height:150px;
     transition:transform .18s,border-color .18s,box-shadow .18s}
   .pcard:hover{transform:translateY(-3px);border-color:var(--pine);
-    box-shadow:0 14px 30px -18px rgba(22,46,38,.5)}
+    box-shadow:0 14px 30px -18px rgba(0,0,0,.55)}
   .pcard h3{font-family:'DM Sans',sans-serif;font-weight:600;font-size:18px;
     letter-spacing:-.01em;line-height:1.2;margin-bottom:6px}
   .pcard p{color:var(--muted);font-size:14px;flex:1}
@@ -137,6 +144,7 @@
     body.open .sidebar{transform:translateX(0)}
     body.open .scrim{opacity:1;pointer-events:auto}
     .hamb{display:inline-flex}
+    .collapse-btn{display:none}
     .search .kbd{display:none}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -169,6 +177,9 @@
     <div class="viewbar" id="viewbar">
       <button class="hamb" id="hamb" aria-label="Menu">
         <svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+      <button class="collapse-btn" id="collapse" aria-label="Toggle sidebar" title="Toggle sidebar">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="20"/></svg>
       </button>
       <div class="now" id="now">Home</div>
       <div class="actions">
@@ -316,6 +327,7 @@
   function open(){document.body.classList.add('open')}
   function close(){document.body.classList.remove('open')}
   hamb.addEventListener('click',open); scrim.addEventListener('click',close);
+  document.getElementById('collapse').addEventListener('click',()=>document.body.classList.toggle('collapsed'));
 
   route();
 </script>
