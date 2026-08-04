@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* =========================================================
+     Your pages + home text live in the <script> at the bottom,
+     marked "EDIT THIS LIST". Nothing else needs touching.
+     ========================================================= */
+  :root{
+    /* palette matched to the demo pages (navy/blue slate) */
+    --paper:#F4F6F9;--panel:#FFFFFF;--card:#FFFFFF;
+    --ink:#0F2A43;--muted:#5A6B7D;--faint:#9AA8B6;
+    --line:#DCE3EC;--line-2:#C7D3E0;
+    --pine:#0A4FA8;--pine-dark:#083E85;--pine-tint:#E8F1FB;  /* brand navy + tint */
+    --gold:#1AA8E8;--sb:288px;                                /* bright-blue highlight */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);
+    -webkit-font-smoothing:antialiased;display:flex;overflow:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ---------------- sidebar ---------------- */
+  .sidebar{width:var(--sb);flex:none;height:100vh;background:var(--panel);
+    border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:40}
+  .brand{padding:22px 22px 16px;display:flex;align-items:center;gap:11px;cursor:pointer}
+  .brand .mark{width:34px;height:34px;border-radius:9px;flex:none;background:var(--pine);
+    position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+  .brand .mark::before,.brand .mark::after{content:"";position:absolute;border-radius:2px}
+  .brand .mark::before{left:9px;top:9px;width:16px;height:3px;background:#fff}
+  .brand .mark::after{left:9px;top:16px;width:11px;height:3px;background:var(--gold)}
+  .brand .name{font-family:'DM Sans',sans-serif;font-weight:700;font-size:19px;
+    letter-spacing:-.02em;line-height:1}
+  .brand .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--pine);margin-top:3px}
+
+  .search{position:relative;padding:4px 16px 14px}
+  #q{width:100%;font:450 14px/1 'Inter',sans-serif;color:var(--ink);background:var(--card);
+    border:1px solid var(--line-2);border-radius:9px;padding:11px 12px 11px 36px;
+    transition:border-color .15s,box-shadow .15s}
+  #q::placeholder{color:var(--faint)}
+  #q:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(31,111,92,.12)}
+  .search .mag{position:absolute;left:28px;top:15px;width:16px;height:16px;stroke:var(--muted);
+    fill:none;stroke-width:2;pointer-events:none}
+  .search .kbd{position:absolute;right:26px;top:13px;font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;color:var(--muted);border:1px solid var(--line-2);border-radius:5px;
+    padding:2px 6px;background:var(--paper);pointer-events:none}
+
+  .navwrap{flex:1;overflow-y:auto;padding:4px 12px 16px}
+  .navlabel{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--faint);padding:8px 10px 6px}
+  .nav a{display:block;padding:10px 12px;border-radius:9px;margin-bottom:2px;
+    border-left:3px solid transparent;transition:background .13s,border-color .13s}
+  .nav a:hover{background:var(--pine-tint)}
+  .nav a.active{background:var(--pine-tint);border-left-color:var(--gold)}
+  .nav a .t{font-weight:550;font-size:14.5px;line-height:1.25}
+  .nav a.active .t{color:var(--pine-dark)}
+  .nav a .f{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);margin-top:2px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav a.home .f{display:none}
+  .nav .none{padding:16px 12px;color:var(--muted);font-size:13px;display:none}
+  .nav .none.show{display:block}
+
+  .foot{padding:12px 22px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:var(--faint)}
+
+  /* ---------------- main ---------------- */
+  .main{flex:1;height:100vh;display:flex;flex-direction:column;min-width:0}
+  .viewbar{height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px;
+    background:var(--card);border-bottom:1px solid var(--line)}
+  .hamb{display:none;width:38px;height:38px;border:1px solid var(--line-2);border-radius:8px;
+    background:var(--panel);cursor:pointer;align-items:center;justify-content:center;flex:none}
+  .hamb svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2}
+  .viewbar .now{font-weight:600;font-size:15px;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .viewbar .now .nf{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);
+    font-weight:400;margin-left:8px}
+  .viewbar .actions{margin-left:auto;display:flex;gap:8px}
+  .viewbar.home-mode .actions{display:none}
+  .viewbar .btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;
+    border:1px solid var(--line-2);border-radius:8px;background:var(--panel);font-size:13px;
+    font-weight:500;color:var(--muted);cursor:pointer;transition:border-color .13s,color .13s}
+  .viewbar .btn:hover{border-color:var(--pine);color:var(--pine-dark)}
+  .viewbar .btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+
+  .stage{flex:1;position:relative;background:var(--paper)}
+  #frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}
+  #frame.show{display:block}
+
+  /* ---------------- home screen ---------------- */
+  .home{position:absolute;inset:0;overflow-y:auto;display:none}
+  .home.show{display:block}
+  .home-inner{max-width:960px;margin:0 auto;padding:clamp(36px,6vw,72px) clamp(22px,5vw,48px) 64px}
+  .home .eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--pine)}
+  .home .eyebrow::before{content:"";width:22px;height:8px;
+    background:linear-gradient(var(--pine),var(--pine)) left/6px 100% no-repeat,
+      linear-gradient(var(--gold),var(--gold)) 9px 0/6px 100% no-repeat,
+      linear-gradient(var(--pine),var(--pine)) right/6px 100% no-repeat}
+  .home h1{font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:clamp(34px,5.5vw,56px);letter-spacing:-.03em;line-height:1;margin:16px 0 14px}
+  .home .lede{color:var(--muted);font-size:clamp(15px,2vw,18px);max-width:56ch}
+  .home .meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);
+    margin:26px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px}
+  .pcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:20px 20px 16px;min-height:150px;
+    transition:transform .18s,border-color .18s,box-shadow .18s}
+  .pcard:hover{transform:translateY(-3px);border-color:var(--pine);
+    box-shadow:0 14px 30px -18px rgba(22,46,38,.5)}
+  .pcard h3{font-family:'DM Sans',sans-serif;font-weight:600;font-size:18px;
+    letter-spacing:-.01em;line-height:1.2;margin-bottom:6px}
+  .pcard p{color:var(--muted);font-size:14px;flex:1}
+  .pcard .row{display:flex;align-items:center;justify-content:space-between;margin-top:14px;
+    padding-top:12px;border-top:1px solid var(--line)}
+  .pcard .fn{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pine-dark);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pcard .ar{width:18px;height:18px;flex:none;stroke:var(--faint);fill:none;stroke-width:2;
+    transition:stroke .18s,transform .18s}
+  .pcard:hover .ar{stroke:var(--gold);transform:translateX(3px)}
+
+  .scrim{position:fixed;inset:0;background:rgba(20,35,30,.4);z-index:35;opacity:0;
+    pointer-events:none;transition:opacity .2s}
+
+  @media (max-width:860px){
+    .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .22s ease;
+      box-shadow:0 0 40px rgba(0,0,0,.15)}
+    body.open .sidebar{transform:translateX(0)}
+    body.open .scrim{opacity:1;pointer-events:auto}
+    .hamb{display:inline-flex}
+    .search .kbd{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand" id="brand">
+      <div class="mark"></div>
+      <div>
+        <div class="name" id="brand-name">My Pages</div>
+        <div class="tag" id="brand-tag">Portal</div>
+      </div>
+    </div>
+    <div class="search">
+      <svg class="mag" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input id="q" type="text" placeholder="Filter…" autocomplete="off" spellcheck="false" aria-label="Filter pages">
+      <span class="kbd">/</span>
+    </div>
+    <div class="navwrap">
+      <nav class="nav" id="nav"></nav>
+      <div class="none" id="none">No pages match.</div>
+    </div>
+    <div class="foot" id="foot"></div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div class="main">
+    <div class="viewbar" id="viewbar">
+      <button class="hamb" id="hamb" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+      <div class="now" id="now">Home</div>
+      <div class="actions">
+        <button class="btn" id="reload" title="Reload page">
+          <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2.1-9.4L23 10"/></svg>
+          <span>Reload</span>
+        </button>
+        <a class="btn" id="newtab" target="_blank" rel="noopener" title="Open in new tab">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          <span>Open</span>
+        </a>
+      </div>
+    </div>
+    <div class="stage">
+      <iframe id="frame" title="Page view"></iframe>
+      <section class="home" id="home">
+        <div class="home-inner">
+          <span class="eyebrow" id="home-eyebrow">Portal</span>
+          <h1 id="home-headline">Everything in one place.</h1>
+          <p class="lede" id="home-intro">A single home for all my pages. Choose one below to open it.</p>
+          <div class="meta" id="home-meta"></div>
+          <div class="cards" id="cards"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script>
+  /* =====================================================================
+     EDIT THIS LIST — one entry per HTML file next to this file.
+       file : exact filename (case-sensitive on GitHub Pages)
+       title: label shown in sidebar + on its home card
+       desc : short line on the card
+  ===================================================================== */
+  const PAGES = [
+    { file: "Aerospace_F_R_Agentic_Powered.html", title: "Aerospace · Agentic Planning", desc: "Autonomous forecast & replenishment command centre for aftermarket parts (APS)." },
+    { file: "CPG_F_R_Agentic_Powered.html",       title: "CPG · Agentic Planning",       desc: "Agent-powered planning command centre — The Nourish Co." },
+    { file: "CPG_F_R.html",                        title: "CPG · Supply Intelligence",     desc: "Forecast & replenishment supply intelligence for consumer goods." },
+    { file: "Apparel_Retailer_F_R_US.html",        title: "Apparel Retail · US",           desc: "Supply intelligence for Meridian Apparel Co. (US)." },
+    { file: "Apparel_Retailer_F_R_India.html",     title: "Apparel Retail · India",        desc: "Apparel retail forecast & replenishment intelligence (India)." },
+    { file: "Life_Sciences_F_R_S_OP.html",         title: "Life Sciences · S&OP",          desc: "Supply assurance and S&OP planning — NovaCare Renal / KidneyCare PlanIQ." },
+  ];
+
+  /* ---- home screen + branding text ---- */
+  const SITE = {
+    name:     "Supply Intelligence",
+    tag:      "Demos",
+    headline: "Planning demos, by industry.",
+    intro:    "Interactive forecast & replenishment showcases across sectors. Pick one to open its planning workspace.",
+  };
+  /* ===================== stop editing below ===================== */
+
+  document.getElementById('brand-name').textContent   = SITE.name;
+  document.getElementById('brand-tag').textContent    = SITE.tag;
+  document.getElementById('home-eyebrow').textContent = SITE.tag;
+  document.getElementById('home-headline').textContent= SITE.headline;
+  document.getElementById('home-intro').textContent   = SITE.intro;
+
+  const nav=document.getElementById('nav'), none=document.getElementById('none'),
+        q=document.getElementById('q'), frame=document.getElementById('frame'),
+        home=document.getElementById('home'), cards=document.getElementById('cards'),
+        now=document.getElementById('now'), newtab=document.getElementById('newtab'),
+        viewbar=document.getElementById('viewbar'), foot=document.getElementById('foot'),
+        homeMeta=document.getElementById('home-meta');
+
+  function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  const arrow='<svg class="ar" viewBox="0 0 24 24"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+
+  // sidebar: Home item + page items
+  nav.innerHTML =
+    `<a href="#" class="home" data-file="__home__" data-search="home"><div class="t">Home</div></a>`
+    + `<div class="navlabel">Pages</div>`
+    + PAGES.map(p=>`
+      <a href="#${encodeURIComponent(p.file)}" data-file="${esc(p.file)}"
+         data-search="${esc((p.title+' '+(p.desc||'')+' '+p.file).toLowerCase())}">
+        <div class="t">${esc(p.title||p.file)}</div>
+        <div class="f">${esc(p.file)}</div>
+      </a>`).join('');
+
+  // home cards
+  cards.innerHTML = PAGES.map(p=>`
+    <a class="pcard" href="#${encodeURIComponent(p.file)}">
+      <h3>${esc(p.title||p.file)}</h3>
+      <p>${esc(p.desc||'')}</p>
+      <span class="row"><span class="fn">${esc(p.file)}</span>${arrow}</span>
+    </a>`).join('');
+
+  homeMeta.textContent = PAGES.length + ' page' + (PAGES.length===1?'':'s');
+  foot.textContent = PAGES.length + ' page' + (PAGES.length===1?'':'s');
+
+  function setActive(file){
+    nav.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.dataset.file===file));
+  }
+
+  function showHome(){
+    frame.classList.remove('show'); frame.removeAttribute('src');
+    home.classList.add('show');
+    viewbar.classList.add('home-mode');
+    now.textContent = 'Home';
+    setActive('__home__');
+    document.title = SITE.name;
+    if(document.body.classList.contains('open')) close();
+  }
+
+  function load(file){
+    const p = PAGES.find(x=>x.file===file);
+    if(!p){ showHome(); return; }
+    home.classList.remove('show');
+    viewbar.classList.remove('home-mode');
+    frame.classList.add('show'); frame.src = p.file;
+    now.innerHTML = esc(p.title||p.file) + '<span class="nf">'+esc(p.file)+'</span>';
+    newtab.href = p.file;
+    setActive(file);
+    document.title = (p.title||p.file) + ' · ' + SITE.name;
+    if(document.body.classList.contains('open')) close();
+  }
+
+  function route(){
+    const h = decodeURIComponent(location.hash.replace(/^#/,''));
+    if(h && PAGES.some(p=>p.file===h)) load(h);
+    else showHome();
+  }
+  window.addEventListener('hashchange', route);
+
+  document.getElementById('brand').addEventListener('click', ()=>{ location.hash=''; route(); });
+
+  q.addEventListener('input', ()=>{
+    const t=q.value.trim().toLowerCase(); let shown=0;
+    nav.querySelectorAll('a').forEach(a=>{
+      if(a.dataset.file==='__home__'){ a.style.display = (!t||'home'.includes(t))?'block':'none'; return; }
+      const hit=!t||a.dataset.search.includes(t);
+      a.style.display=hit?'block':'none'; if(hit) shown++;
+    });
+    none.classList.toggle('show', shown===0 && t!=='');
+  });
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='/' && document.activeElement!==q){e.preventDefault();q.focus();}
+    if(e.key==='Escape'){ if(document.activeElement===q){q.value='';q.dispatchEvent(new Event('input'));q.blur();} else if(document.body.classList.contains('open')) close(); }
+  });
+
+  document.getElementById('reload').addEventListener('click',()=>{ if(frame.getAttribute('src')) frame.src=frame.src; });
+
+  const hamb=document.getElementById('hamb'), scrim=document.getElementById('scrim');
+  function open(){document.body.classList.add('open')}
+  function close(){document.body.classList.remove('open')}
+  hamb.addEventListener('click',open); scrim.addEventListener('click',close);
+
+  route();
+</script>
+</body>
+</html>
