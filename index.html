@@ -3,34 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portal</title>
+<title>Supply chain planning solutions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   /* =========================================================
-     Your pages + home text live in the <script> at the bottom,
+     Your pages + text live in the <script> at the bottom,
      marked "EDIT THIS LIST". Nothing else needs touching.
      ========================================================= */
   :root{
-    /* dark slate/navy palette matched to the demos' default (dark) theme */
     --paper:#0A0E1A;--panel:#0F172A;--card:#1E293B;
     --ink:#F1F5F9;--muted:#94A3B8;--faint:#64748B;
     --line:#334155;--line-2:#3E4C61;
-    --pine:#1AA8E8;--pine-dark:#7DD3FC;--pine-tint:#17304A;  /* bright-blue accent + tint */
-    --gold:#5BCAEF;--sb:288px;                                /* light-blue highlight */
+    --pine:#1AA8E8;--pine-dark:#7DD3FC;--pine-tint:#17304A;
+    --gold:#5BCAEF;--sb:288px;--bannerH:60px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   html{-webkit-text-size-adjust:100%}
   body{
     font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);
-    -webkit-font-smoothing:antialiased;display:flex;overflow:hidden;
+    -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;overflow:hidden;
   }
   a{color:inherit;text-decoration:none}
 
+  /* ---------------- top Accenture brand bar ---------------- */
+  .brandbar{flex:none;height:var(--bannerH);display:flex;align-items:center;gap:16px;
+    padding:0 clamp(16px,3vw,28px);color:#fff;position:relative;z-index:60;
+    background:linear-gradient(100deg,#190630 0%,#3F1875 50%,#210A42 100%)}
+  .brandbar .acc{font-family:'DM Sans',sans-serif;font-weight:700;font-size:21px;
+    letter-spacing:-.01em;display:inline-flex;align-items:center;line-height:1}
+  .brandbar .acc .chev{color:#5EEAD4;margin-left:1px;font-weight:700}
+  .brandbar .divider{width:1px;height:26px;background:rgba(255,255,255,.3);flex:none}
+  .brandbar .btitle{font-family:'DM Sans',sans-serif;font-weight:600;font-size:18px;color:#fff}
+  @media (max-width:560px){ .brandbar .btitle{font-size:15px} .brandbar .acc{font-size:18px} }
+  .brandbar .bar-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .brandbar .live{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.12em;font-weight:700;color:#fff;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    padding:5px 11px;border-radius:999px}
+  .brandbar .live-dot{width:8px;height:8px;border-radius:50%;background:#22E37B;
+    box-shadow:0 0 0 0 rgba(34,227,123,.7);animation:pulse 1.7s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,227,123,.6)}70%{box-shadow:0 0 0 8px rgba(34,227,123,0)}
+    100%{box-shadow:0 0 0 0 rgba(34,227,123,0)}}
+  .brandbar .globe{width:18px;height:18px;stroke:rgba(255,255,255,.75);fill:none;stroke-width:1.8;flex:none}
+  .brandbar .wclock{display:flex;align-items:center;gap:14px}
+  .brandbar .wclock .z{display:flex;flex-direction:column;line-height:1.15}
+  .brandbar .wclock .zl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;
+    color:rgba(255,255,255,.6);text-transform:uppercase}
+  .brandbar .wclock .zt{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:#fff;
+    font-variant-numeric:tabular-nums}
+  @media (max-width:900px){ .brandbar .wclock .z:nth-child(n+2){display:none} }
+  @media (max-width:680px){ .brandbar .live{display:none} }
+  @media (max-width:520px){ .brandbar .wclock,.brandbar .globe{display:none} }
+
+  /* ---------------- app row (sidebar + main) ---------------- */
+  .app{flex:1;display:flex;min-height:0}
+
   /* ---------------- sidebar ---------------- */
-  .sidebar{width:var(--sb);flex:none;height:100vh;background:var(--panel);
+  .sidebar{width:var(--sb);flex:none;height:100%;background:var(--panel);
     border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:40;
     transition:width .2s ease}
   body.collapsed .sidebar{width:0;border-right-width:0;overflow:hidden}
@@ -60,15 +92,16 @@
   .navwrap{flex:1;overflow-y:auto;padding:4px 12px 16px}
   .navlabel{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--faint);padding:8px 10px 6px}
-  .nav a{display:block;padding:10px 12px;border-radius:9px;margin-bottom:2px;
+  .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;margin-bottom:2px;
     border-left:3px solid transparent;transition:background .13s,border-color .13s}
   .nav a:hover{background:var(--pine-tint)}
   .nav a.active{background:var(--pine-tint);border-left-color:var(--gold)}
+  .nav a .ic{flex:none;width:18px;height:18px;display:flex}
+  .nav a .ic svg{width:18px;height:18px;fill:none;stroke:var(--faint);stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round;transition:stroke .13s}
+  .nav a:hover .ic svg,.nav a.active .ic svg{stroke:var(--pine)}
   .nav a .t{font-weight:550;font-size:14.5px;line-height:1.25}
   .nav a.active .t{color:var(--pine-dark)}
-  .nav a .f{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--faint);margin-top:2px;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .nav a.nav-home .f{display:none}
   .navwrap .none{padding:16px 12px;color:var(--muted);font-size:13px;display:none}
   .navwrap .none.show{display:block}
 
@@ -76,7 +109,7 @@
     font-size:11px;color:var(--faint)}
 
   /* ---------------- main ---------------- */
-  .main{flex:1;height:100vh;display:flex;flex-direction:column;min-width:0}
+  .main{flex:1;height:100%;display:flex;flex-direction:column;min-width:0}
   .viewbar{height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px;
     background:var(--card);border-bottom:1px solid var(--line)}
   .hamb{display:none;width:38px;height:38px;border:1px solid var(--line-2);border-radius:8px;
@@ -89,6 +122,9 @@
   .collapse-btn svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2;fill:none}
   .viewbar .now{font-weight:600;font-size:15px;min-width:0;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap}
+  .viewbar .now .crumb{color:var(--muted);font-weight:500;cursor:pointer;transition:color .13s}
+  .viewbar .now .crumb:hover{color:var(--pine)}
+  .viewbar .now .sep{color:var(--faint);font-weight:400;margin:0 9px}
   .viewbar .now .nf{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);
     font-weight:400;margin-left:8px}
   .viewbar .actions{margin-left:auto;display:flex;gap:8px}
@@ -106,7 +142,7 @@
   /* ---------------- home screen ---------------- */
   .home{position:absolute;inset:0;overflow-y:auto;display:none}
   .home.show{display:block}
-  .home-inner{max-width:960px;margin:0 auto;padding:clamp(36px,6vw,72px) clamp(22px,5vw,48px) 64px}
+  .home-inner{max-width:1300px;margin:0 auto;padding:clamp(30px,5vw,60px) clamp(22px,5vw,44px) 60px}
   .home .eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;
     font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--pine)}
   .home .eyebrow::before{content:"";width:22px;height:8px;
@@ -114,33 +150,42 @@
       linear-gradient(var(--gold),var(--gold)) 9px 0/6px 100% no-repeat,
       linear-gradient(var(--pine),var(--pine)) right/6px 100% no-repeat}
   .home h1{font-family:'DM Sans',sans-serif;font-weight:700;
-    font-size:clamp(34px,5.5vw,56px);letter-spacing:-.03em;line-height:1;margin:16px 0 14px}
-  .home .lede{color:var(--muted);font-size:clamp(15px,2vw,18px);max-width:56ch}
+    font-size:clamp(30px,4.6vw,50px);letter-spacing:-.02em;line-height:1.05;margin:16px 0 14px;
+    max-width:20ch}
+  .home .lede{color:var(--muted);font-size:clamp(15px,2vw,18px);max-width:60ch}
   .home .meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);
     margin:26px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px}
+
+  .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+  @media (max-width:1024px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media (max-width:720px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:480px){.cards{grid-template-columns:1fr}}
   .pcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);
-    border-radius:14px;padding:20px 20px 16px;min-height:150px;
+    border-radius:14px;padding:18px 16px 14px;min-height:196px;
     transition:transform .18s,border-color .18s,box-shadow .18s}
   .pcard:hover{transform:translateY(-3px);border-color:var(--pine);
     box-shadow:0 14px 30px -18px rgba(0,0,0,.55)}
-  .pcard h3{font-family:'DM Sans',sans-serif;font-weight:600;font-size:18px;
-    letter-spacing:-.01em;line-height:1.2;margin-bottom:6px}
-  .pcard p{color:var(--muted);font-size:14px;flex:1}
+  .pcard .chip{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;
+    justify-content:center;background:var(--pine-tint);border:1px solid rgba(26,168,232,.28);
+    margin-bottom:13px}
+  .pcard .chip svg{width:21px;height:21px;stroke:var(--pine);fill:none;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+  .pcard h3{font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;
+    letter-spacing:-.01em;line-height:1.22;margin-bottom:6px}
+  .pcard p{color:var(--muted);font-size:12.5px;line-height:1.45;flex:1}
   .pcard .row{display:flex;align-items:center;justify-content:space-between;margin-top:14px;
     padding-top:12px;border-top:1px solid var(--line)}
-  .pcard .fn{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--pine-dark);
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .pcard .ar{width:18px;height:18px;flex:none;stroke:var(--faint);fill:none;stroke-width:2;
+  .pcard .open{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--pine)}
+  .pcard .ar{width:17px;height:17px;flex:none;stroke:var(--pine);fill:none;stroke-width:2;
     transition:stroke .18s,transform .18s}
   .pcard:hover .ar{stroke:var(--gold);transform:translateX(3px)}
 
-  .scrim{position:fixed;inset:0;background:rgba(20,35,30,.4);z-index:35;opacity:0;
+  .scrim{position:fixed;inset:0;background:rgba(5,8,16,.55);z-index:35;opacity:0;
     pointer-events:none;transition:opacity .2s}
 
   @media (max-width:860px){
-    .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .22s ease;
-      box-shadow:0 0 40px rgba(0,0,0,.15)}
+    .sidebar{position:fixed;left:0;top:var(--bannerH);bottom:0;height:auto;
+      transform:translateX(-100%);transition:transform .22s ease;box-shadow:0 0 40px rgba(0,0,0,.5)}
     body.open .sidebar{transform:translateX(0)}
     body.open .scrim{opacity:1;pointer-events:auto}
     .hamb{display:inline-flex}
@@ -151,59 +196,72 @@
 </style>
 </head>
 <body>
-  <aside class="sidebar">
-    <div class="brand" id="brand">
-      <div class="mark"></div>
-      <div>
-        <div class="name" id="brand-name">My Pages</div>
-        <div class="tag" id="brand-tag">Portal</div>
-      </div>
+  <header class="brandbar">
+    <span class="acc">accenture<span class="chev">&#8250;</span></span>
+    <span class="divider"></span>
+    <span class="btitle" id="banner-title">Supply chain planning solutions</span>
+    <div class="bar-right">
+      <span class="live"><span class="live-dot"></span>LIVE</span>
+      <svg class="globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <div class="wclock" id="wclock"></div>
     </div>
-    <div class="search">
-      <svg class="mag" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-      <input id="q" type="text" placeholder="Filter…" autocomplete="off" spellcheck="false" aria-label="Filter pages">
-      <span class="kbd">/</span>
-    </div>
-    <div class="navwrap">
-      <nav class="nav" id="nav"></nav>
-      <div class="none" id="none">No pages match.</div>
-    </div>
-    <div class="foot" id="foot"></div>
-  </aside>
+  </header>
 
-  <div class="scrim" id="scrim"></div>
-
-  <div class="main">
-    <div class="viewbar" id="viewbar">
-      <button class="hamb" id="hamb" aria-label="Menu">
-        <svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-      </button>
-      <button class="collapse-btn" id="collapse" aria-label="Toggle sidebar" title="Toggle sidebar">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="20"/></svg>
-      </button>
-      <div class="now" id="now">Home</div>
-      <div class="actions">
-        <button class="btn" id="reload" title="Reload page">
-          <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2.1-9.4L23 10"/></svg>
-          <span>Reload</span>
-        </button>
-        <a class="btn" id="newtab" target="_blank" rel="noopener" title="Open in new tab">
-          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          <span>Open</span>
-        </a>
-      </div>
-    </div>
-    <div class="stage">
-      <iframe id="frame" title="Page view"></iframe>
-      <section class="home" id="home">
-        <div class="home-inner">
-          <span class="eyebrow" id="home-eyebrow">Portal</span>
-          <h1 id="home-headline">Everything in one place.</h1>
-          <p class="lede" id="home-intro">A single home for all my pages. Choose one below to open it.</p>
-          <div class="meta" id="home-meta"></div>
-          <div class="cards" id="cards"></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand" id="brand">
+        <div class="mark"></div>
+        <div>
+          <div class="name" id="brand-name">My Pages</div>
+          <div class="tag" id="brand-tag">Portal</div>
         </div>
-      </section>
+      </div>
+      <div class="search">
+        <svg class="mag" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+        <input id="q" type="text" placeholder="Filter…" autocomplete="off" spellcheck="false" aria-label="Filter pages">
+        <span class="kbd">/</span>
+      </div>
+      <div class="navwrap">
+        <nav class="nav" id="nav"></nav>
+        <div class="none" id="none">No pages match.</div>
+      </div>
+      <div class="foot" id="foot"></div>
+    </aside>
+
+    <div class="scrim" id="scrim"></div>
+
+    <div class="main">
+      <div class="viewbar" id="viewbar">
+        <button class="hamb" id="hamb" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+        </button>
+        <button class="collapse-btn" id="collapse" aria-label="Toggle sidebar" title="Toggle sidebar">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="20"/></svg>
+        </button>
+        <div class="now" id="now">Home</div>
+        <div class="actions">
+          <button class="btn" id="reload" title="Reload page">
+            <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2.1-9.4L23 10"/></svg>
+            <span>Reload</span>
+          </button>
+          <a class="btn" id="newtab" target="_blank" rel="noopener" title="Open in new tab">
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>Open</span>
+          </a>
+        </div>
+      </div>
+      <div class="stage">
+        <iframe id="frame" title="Page view"></iframe>
+        <section class="home" id="home">
+          <div class="home-inner">
+            <span class="eyebrow" id="home-eyebrow">Portal</span>
+            <h1 id="home-headline">Everything in one place.</h1>
+            <p class="lede" id="home-intro">A single home for all my pages.</p>
+            <div class="meta" id="home-meta"></div>
+            <div class="cards" id="cards"></div>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -215,23 +273,24 @@
        desc : short line on the card
   ===================================================================== */
   const PAGES = [
-    { file: "Aerospace_F_R_Agentic_Powered.html", title: "Aerospace · Agentic Planning", desc: "Autonomous forecast & replenishment command centre for aftermarket parts (APS)." },
-    { file: "CPG_F_R_Agentic_Powered.html",       title: "CPG · Agentic Planning",       desc: "Agent-powered planning command centre — The Nourish Co." },
-    { file: "CPG_F_R.html",                        title: "CPG · Supply Intelligence",     desc: "Forecast & replenishment supply intelligence for consumer goods." },
-    { file: "Apparel_Retailer_F_R_US.html",        title: "Apparel Retail · US",           desc: "Supply intelligence for Meridian Apparel Co. (US)." },
-    { file: "Apparel_Retailer_F_R_India.html",     title: "Apparel Retail · India",        desc: "Apparel retail forecast & replenishment intelligence (India)." },
-    { file: "Life_Sciences_F_R_S_OP.html",         title: "Life Sciences · S&OP",          desc: "Supply assurance and S&OP planning — NovaCare Renal / KidneyCare PlanIQ." },
+    { file: "Apparel_Retailer_F_R_US.html",        icon: "apparel", title: "Apparel Retail · US",           desc: "Supply intelligence for Meridian Apparel Co. (US)." },
+    { file: "CPG_F_R_Agentic_Powered.html",        icon: "cpgai",   title: "CPG · Agentic Planning",        desc: "Agent-powered planning command centre — The Nourish Co." },
+    { file: "CPG_F_R.html",                         icon: "box",     title: "CPG · Supply Intelligence",     desc: "Forecast & replenishment supply intelligence for consumer goods." },
+    { file: "Life_Sciences_F_R_S_OP.html",          icon: "flask",   title: "Life Sciences · S&OP",          desc: "Supply assurance and S&OP planning — NovaCare Renal / KidneyCare PlanIQ." },
+    { file: "Aerospace_F_R_Agentic_Powered.html",   icon: "plane",   title: "Aerospace · Agentic Planning",  desc: "Autonomous forecast & replenishment command centre for aftermarket parts (APS)." },
   ];
 
-  /* ---- home screen + branding text ---- */
+  /* ---- header + branding text ---- */
   const SITE = {
-    name:     "Supply Intelligence",
+    banner:   "Supply chain planning solutions",   /* purple Accenture bar title */
+    name:     "Supply Intelligence",               /* sidebar brand */
     tag:      "Demos",
-    headline: "Planning demos, by industry.",
-    intro:    "Interactive forecast & replenishment showcases across sectors. Pick one to open its planning workspace.",
+    headline: "Reimagining Supply Chain Planning in the world of Agentic AI",
+    intro:    "Interactive forecast & replenishment showcases across sectors.",
   };
   /* ===================== stop editing below ===================== */
 
+  document.getElementById('banner-title').textContent = SITE.banner;
   document.getElementById('brand-name').textContent   = SITE.name;
   document.getElementById('brand-tag').textContent    = SITE.tag;
   document.getElementById('home-eyebrow').textContent = SITE.tag;
@@ -247,80 +306,80 @@
 
   function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
   const arrow='<svg class="ar" viewBox="0 0 24 24"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+  const ICONS = {
+    home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>',
+    apparel:'<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>',
+    agentic:'<path d="M9.94 15.5 8.5 14.06 2.37 12.48a.5.5 0 0 1 0-.96L8.5 9.94 9.94 8.5l1.58-6.13a.5.5 0 0 1 .96 0L14.06 8.5l1.44 1.44 6.13 1.58a.5.5 0 0 1 0 .96L15.5 14.06l-1.44 1.44-1.58 6.13a.5.5 0 0 1-.96 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/>',
+    chart:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+    box:'<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+    bag:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+    cpgai:'<rect x="3.5" y="8" width="14" height="12" rx="2"/><path d="M3.5 12h14"/><path d="M20 2.5L20.7 4.3L22.5 5L20.7 5.7L20 7.5L19.3 5.7L17.5 5L19.3 4.3Z"/>',
+    flask:'<path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/>',
+    plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',
+  };
 
-  // sidebar: Home item + page items
+  // sidebar: Home item + page items (with icons, no filename)
   nav.innerHTML =
-    `<a href="#" class="nav-home" data-file="__home__" data-search="home"><div class="t">Home</div></a>`
-    + `<div class="navlabel">Pages</div>`
+    `<a href="#" class="nav-home" data-file="__home__" data-search="home"><span class="ic"><svg viewBox="0 0 24 24">${ICONS.home}</svg></span><div class="t">Home</div></a>`
+    + `<div class="navlabel">Solutions</div>`
     + PAGES.map(p=>`
       <a href="#${encodeURIComponent(p.file)}" data-file="${esc(p.file)}"
          data-search="${esc((p.title+' '+(p.desc||'')+' '+p.file).toLowerCase())}">
+        <span class="ic"><svg viewBox="0 0 24 24">${ICONS[p.icon]||''}</svg></span>
         <div class="t">${esc(p.title||p.file)}</div>
-        <div class="f">${esc(p.file)}</div>
       </a>`).join('');
 
-  // home cards
+  // home cards (no filename shown; whole card is the link)
   cards.innerHTML = PAGES.map(p=>`
     <a class="pcard" href="#${encodeURIComponent(p.file)}">
+      <span class="chip"><svg viewBox="0 0 24 24">${ICONS[p.icon]||''}</svg></span>
       <h3>${esc(p.title||p.file)}</h3>
       <p>${esc(p.desc||'')}</p>
-      <span class="row"><span class="fn">${esc(p.file)}</span>${arrow}</span>
+      <span class="row"><span class="open">Open</span>${arrow}</span>
     </a>`).join('');
 
-  homeMeta.textContent = PAGES.length + ' page' + (PAGES.length===1?'':'s');
-  foot.textContent = PAGES.length + ' page' + (PAGES.length===1?'':'s');
+  homeMeta.textContent = PAGES.length + ' solution' + (PAGES.length===1?'':'s');
+  foot.textContent = PAGES.length + ' solution' + (PAGES.length===1?'':'s');
 
   function setActive(file){
     nav.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.dataset.file===file));
   }
-
   function showHome(){
     frame.classList.remove('show'); frame.removeAttribute('src');
-    home.classList.add('show');
-    viewbar.classList.add('home-mode');
-    now.textContent = 'Home';
-    setActive('__home__');
-    document.title = SITE.name;
+    home.classList.add('show'); viewbar.classList.add('home-mode');
+    now.textContent='Home'; setActive('__home__'); document.title=SITE.banner;
     if(document.body.classList.contains('open')) close();
   }
-
   function load(file){
-    const p = PAGES.find(x=>x.file===file);
+    const p=PAGES.find(x=>x.file===file);
     if(!p){ showHome(); return; }
-    home.classList.remove('show');
-    viewbar.classList.remove('home-mode');
-    frame.classList.add('show'); frame.src = p.file;
-    now.innerHTML = esc(p.title||p.file) + '<span class="nf">'+esc(p.file)+'</span>';
-    newtab.href = p.file;
-    setActive(file);
-    document.title = (p.title||p.file) + ' · ' + SITE.name;
+    home.classList.remove('show'); viewbar.classList.remove('home-mode');
+    frame.classList.add('show'); frame.src=p.file;
+    now.innerHTML='<a class="crumb" href="#">Home</a><span class="sep">/</span>'+esc(p.title||p.file);
+    newtab.href=p.file; setActive(file);
+    document.title=(p.title||p.file)+' · '+SITE.banner;
     if(document.body.classList.contains('open')) close();
   }
-
   function route(){
-    const h = decodeURIComponent(location.hash.replace(/^#/,''));
-    if(h && PAGES.some(p=>p.file===h)) load(h);
-    else showHome();
+    const h=decodeURIComponent(location.hash.replace(/^#/,''));
+    if(h && PAGES.some(p=>p.file===h)) load(h); else showHome();
   }
   window.addEventListener('hashchange', route);
-
   document.getElementById('brand').addEventListener('click', ()=>{ location.hash=''; route(); });
 
   q.addEventListener('input', ()=>{
     const t=q.value.trim().toLowerCase(); let shown=0;
     nav.querySelectorAll('a').forEach(a=>{
-      if(a.dataset.file==='__home__'){ a.style.display = (!t||'home'.includes(t))?'block':'none'; return; }
+      if(a.dataset.file==='__home__'){ a.style.display=(!t||'home'.includes(t))?'block':'none'; return; }
       const hit=!t||a.dataset.search.includes(t);
       a.style.display=hit?'block':'none'; if(hit) shown++;
     });
     none.classList.toggle('show', shown===0 && t!=='');
   });
-
   document.addEventListener('keydown',e=>{
     if(e.key==='/' && document.activeElement!==q){e.preventDefault();q.focus();}
     if(e.key==='Escape'){ if(document.activeElement===q){q.value='';q.dispatchEvent(new Event('input'));q.blur();} else if(document.body.classList.contains('open')) close(); }
   });
-
   document.getElementById('reload').addEventListener('click',()=>{ if(frame.getAttribute('src')) frame.src=frame.src; });
 
   const hamb=document.getElementById('hamb'), scrim=document.getElementById('scrim');
@@ -328,6 +387,16 @@
   function close(){document.body.classList.remove('open')}
   hamb.addEventListener('click',open); scrim.addEventListener('click',close);
   document.getElementById('collapse').addEventListener('click',()=>document.body.classList.toggle('collapsed'));
+
+  /* ---- live local clock (auto-detects the viewer's time zone) ---- */
+  const wclock=document.getElementById('wclock');
+  const localTZ=(Intl.DateTimeFormat().resolvedOptions().timeZone)||'';
+  const tzLabel=localTZ ? localTZ.split('/').pop().replace(/_/g,' ') : 'Local';
+  wclock.innerHTML=`<span class="z"><span class="zl">${esc(tzLabel)} · local time</span><span class="zt" id="localtime"></span></span>`;
+  function tick(){
+    document.getElementById('localtime').textContent=new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date());
+  }
+  tick(); setInterval(tick,1000);
 
   route();
 </script>
