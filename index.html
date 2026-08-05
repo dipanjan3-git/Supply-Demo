@@ -57,6 +57,14 @@
   @media (max-width:900px){ .brandbar .wclock .z:nth-child(n+2){display:none} }
   @media (max-width:680px){ .brandbar .live{display:none} }
   @media (max-width:520px){ .brandbar .wclock,.brandbar .globe{display:none} }
+  .brandbar .logout{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 13px;
+    border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);
+    color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;
+    transition:background .13s,border-color .13s}
+  .brandbar .logout:hover{background:rgba(255,255,255,.17)}
+  .brandbar .logout svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+  @media (max-width:520px){ .brandbar .logout span{display:none} .brandbar .logout{padding:0 9px} }
 
   /* ---------------- app row (sidebar + main) ---------------- */
   .app{flex:1;display:flex;min-height:0}
@@ -106,7 +114,7 @@
   .navwrap .none.show{display:block}
 
   .foot{padding:12px 22px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;
-    font-size:11px;color:var(--faint)}
+    font-size:11px;color:var(--faint);display:flex;align-items:center;justify-content:space-between;gap:8px}
 
   /* ---------------- main ---------------- */
   .main{flex:1;height:100%;display:flex;flex-direction:column;min-width:0}
@@ -156,10 +164,9 @@
   .home .meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);
     margin:26px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 
-  .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-  @media (max-width:1024px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
-  @media (max-width:720px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media (max-width:480px){.cards{grid-template-columns:1fr}}
+  .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  @media (max-width:1024px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:560px){.cards{grid-template-columns:1fr}}
   .pcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);
     border-radius:14px;padding:18px 16px 14px;min-height:196px;
     transition:transform .18s,border-color .18s,box-shadow .18s}
@@ -193,9 +200,60 @@
     .search .kbd{display:none}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+  /* ---------------- login gate ---------------- */
+  .login{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:30px;padding:24px;
+    background:radial-gradient(1100px 520px at 50% -12%, rgba(74,26,122,.6), transparent 62%), var(--paper)}
+  body.authed .login{display:none}
+  .login .lacc{font-family:'DM Sans',sans-serif;font-weight:700;font-size:20px;color:#fff;
+    display:inline-flex;align-items:center;justify-content:center}
+  .login .lacc .chev{color:#5EEAD4;margin-left:1px}
+  .login-head{text-align:center;max-width:680px;padding:0 12px}
+  .login-head .wtag{display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--pine);margin:18px 0 12px}
+  .login-head h1{font-family:'DM Sans',sans-serif;font-weight:700;font-size:clamp(26px,4vw,40px);
+    line-height:1.08;letter-spacing:-.02em;color:#fff;max-width:17ch;margin:0 auto}
+  .login-card{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);
+    border-radius:18px;padding:30px 30px 28px;box-shadow:0 30px 80px -30px rgba(0,0,0,.75)}
+  .login-card h2{font-family:'DM Sans',sans-serif;font-weight:700;font-size:20px;letter-spacing:-.01em;margin-bottom:18px}
+  .login-card label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px 2px;font-weight:500}
+  .login-card input{width:100%;background:var(--card);border:1px solid var(--line-2);border-radius:10px;
+    color:var(--ink);font:450 15px/1 'Inter',sans-serif;padding:13px 14px;margin-bottom:16px;
+    transition:border-color .15s,box-shadow .15s}
+  .login-card input:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(26,168,232,.22)}
+  .login-card .signin{width:100%;border:0;border-radius:10px;cursor:pointer;color:#fff;
+    font:600 15px/1 'DM Sans',sans-serif;padding:14px;margin-top:4px;
+    background:linear-gradient(100deg,#4A1A7A,#6B2C9E)}
+  .login-card .signin:hover{filter:brightness(1.08)}
+  .login-card .err{color:#F87171;font-size:13px;margin-top:12px;min-height:16px;display:none}
+  .login-card .err.show{display:block}
+  .login-card.shake{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+
+  .foot .signout{background:none;border:0;color:var(--muted);font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:0;transition:color .13s}
+  .foot .signout:hover{color:var(--pine)}
 </style>
 </head>
 <body>
+  <div class="login" id="login">
+    <div class="login-head">
+      <span class="lacc">accenture<span class="chev">&#8250;</span></span>
+      <span class="wtag">Welcome</span>
+      <h1>Reimagining Supply Chain Planning in the world of Agentic AI</h1>
+    </div>
+    <form class="login-card" id="login-card">
+      <h2>Sign in</h2>
+      <label for="u">Username</label>
+      <input id="u" type="text" autocomplete="username" autofocus>
+      <label for="p">Password</label>
+      <input id="p" type="password" autocomplete="current-password">
+      <button class="signin" type="submit">Sign in</button>
+      <div class="err" id="login-err">Incorrect username or password.</div>
+    </form>
+  </div>
+
   <header class="brandbar">
     <span class="acc">accenture<span class="chev">&#8250;</span></span>
     <span class="divider"></span>
@@ -204,6 +262,10 @@
       <span class="live"><span class="live-dot"></span>LIVE</span>
       <svg class="globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <div class="wclock" id="wclock"></div>
+      <button class="logout" id="logout" title="Sign out">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sign out</span>
+      </button>
     </div>
   </header>
 
@@ -225,7 +287,6 @@
         <nav class="nav" id="nav"></nav>
         <div class="none" id="none">No pages match.</div>
       </div>
-      <div class="foot" id="foot"></div>
     </aside>
 
     <div class="scrim" id="scrim"></div>
@@ -268,16 +329,16 @@
 <script>
   /* =====================================================================
      EDIT THIS LIST — one entry per HTML file next to this file.
+       slug : clean name shown in the address bar (no spaces/dots)
        file : exact filename (case-sensitive on GitHub Pages)
        title: label shown in sidebar + on its home card
        desc : short line on the card
   ===================================================================== */
   const PAGES = [
-    { file: "Apparel_Retailer_F_R_US.html",        icon: "apparel", title: "Apparel Retail · US",           desc: "Supply intelligence for Meridian Apparel Co. (US)." },
-    { file: "CPG_F_R_Agentic_Powered.html",        icon: "cpgai",   title: "CPG · Agentic Planning",        desc: "Agent-powered planning command centre — The Nourish Co." },
-    { file: "CPG_F_R.html",                         icon: "box",     title: "CPG · Supply Intelligence",     desc: "Forecast & replenishment supply intelligence for consumer goods." },
-    { file: "Life_Sciences_F_R_S_OP.html",          icon: "flask",   title: "Life Sciences · S&OP",          desc: "Supply assurance and S&OP planning — NovaCare Renal / KidneyCare PlanIQ." },
-    { file: "Aerospace_F_R_Agentic_Powered.html",   icon: "plane",   title: "Aerospace · Agentic Planning",  desc: "Autonomous forecast & replenishment command centre for aftermarket parts (APS)." },
+    { slug: "apparel-us",               file: "Apparel_Retailer_F_R_US.html",       icon: "apparel", title: "Apparel US",                desc: "Forecast & replenishment supply intelligence for a US apparel retailer." },
+    { slug: "food-manufacturer-cpg-us", file: "CPG_F_R.html",                        icon: "box",     title: "Food Manufacturer CPG US",  desc: "Forecast & replenishment planning for a US food manufacturer." },
+    { slug: "life-science-clinics-us",  file: "Life_Sciences_F_R_S_OP.html",         icon: "flask",   title: "Life Science Clinics – US", desc: "Supply assurance and S&OP planning for US life-science clinics." },
+    { slug: "aerospace-us",             file: "Aerospace_F_R_Agentic_Powered.html",  icon: "plane",   title: "Aerospace US",              desc: "Forecast & replenishment planning for US aerospace parts." },
   ];
 
   /* ---- header + branding text ---- */
@@ -288,6 +349,9 @@
     headline: "Reimagining Supply Chain Planning in the world of Agentic AI",
     intro:    "Interactive forecast & replenishment showcases across sectors.",
   };
+
+  /* ---- login: shared username + password (change these) ---- */
+  const AUTH = { user: "accenture", pass: "planning2026" };
   /* ===================== stop editing below ===================== */
 
   document.getElementById('banner-title').textContent = SITE.banner;
@@ -320,29 +384,28 @@
 
   // sidebar: Home item + page items (with icons, no filename)
   nav.innerHTML =
-    `<a href="#" class="nav-home" data-file="__home__" data-search="home"><span class="ic"><svg viewBox="0 0 24 24">${ICONS.home}</svg></span><div class="t">Home</div></a>`
+    `<a href="#" class="nav-home" data-key="__home__" data-search="home"><span class="ic"><svg viewBox="0 0 24 24">${ICONS.home}</svg></span><div class="t">Home</div></a>`
     + `<div class="navlabel">Solutions</div>`
     + PAGES.map(p=>`
-      <a href="#${encodeURIComponent(p.file)}" data-file="${esc(p.file)}"
-         data-search="${esc((p.title+' '+(p.desc||'')+' '+p.file).toLowerCase())}">
+      <a href="#${encodeURIComponent(p.slug)}" data-key="${esc(p.slug)}"
+         data-search="${esc((p.title+' '+(p.desc||'')+' '+p.slug).toLowerCase())}">
         <span class="ic"><svg viewBox="0 0 24 24">${ICONS[p.icon]||''}</svg></span>
         <div class="t">${esc(p.title||p.file)}</div>
       </a>`).join('');
 
   // home cards (no filename shown; whole card is the link)
   cards.innerHTML = PAGES.map(p=>`
-    <a class="pcard" href="#${encodeURIComponent(p.file)}">
+    <a class="pcard" href="#${encodeURIComponent(p.slug)}">
       <span class="chip"><svg viewBox="0 0 24 24">${ICONS[p.icon]||''}</svg></span>
       <h3>${esc(p.title||p.file)}</h3>
       <p>${esc(p.desc||'')}</p>
       <span class="row"><span class="open">Open</span>${arrow}</span>
     </a>`).join('');
 
-  homeMeta.textContent = PAGES.length + ' solution' + (PAGES.length===1?'':'s');
-  foot.textContent = PAGES.length + ' solution' + (PAGES.length===1?'':'s');
 
-  function setActive(file){
-    nav.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.dataset.file===file));
+
+  function setActive(key){
+    nav.querySelectorAll('a').forEach(a=>a.classList.toggle('active', a.dataset.key===key));
   }
   function showHome(){
     frame.classList.remove('show'); frame.removeAttribute('src');
@@ -350,19 +413,19 @@
     now.textContent='Home'; setActive('__home__'); document.title=SITE.banner;
     if(document.body.classList.contains('open')) close();
   }
-  function load(file){
-    const p=PAGES.find(x=>x.file===file);
+  function load(slug){
+    const p=PAGES.find(x=>x.slug===slug);
     if(!p){ showHome(); return; }
     home.classList.remove('show'); viewbar.classList.remove('home-mode');
     frame.classList.add('show'); frame.src=p.file;
     now.innerHTML='<a class="crumb" href="#">Home</a><span class="sep">/</span>'+esc(p.title||p.file);
-    newtab.href=p.file; setActive(file);
+    newtab.href=p.file; setActive(slug);
     document.title=(p.title||p.file)+' · '+SITE.banner;
     if(document.body.classList.contains('open')) close();
   }
   function route(){
     const h=decodeURIComponent(location.hash.replace(/^#/,''));
-    if(h && PAGES.some(p=>p.file===h)) load(h); else showHome();
+    if(h && PAGES.some(p=>p.slug===h)) load(h); else showHome();
   }
   window.addEventListener('hashchange', route);
   document.getElementById('brand').addEventListener('click', ()=>{ location.hash=''; route(); });
@@ -370,7 +433,7 @@
   q.addEventListener('input', ()=>{
     const t=q.value.trim().toLowerCase(); let shown=0;
     nav.querySelectorAll('a').forEach(a=>{
-      if(a.dataset.file==='__home__'){ a.style.display=(!t||'home'.includes(t))?'block':'none'; return; }
+      if(a.dataset.key==='__home__'){ a.style.display=(!t||'home'.includes(t))?'block':'none'; return; }
       const hit=!t||a.dataset.search.includes(t);
       a.style.display=hit?'block':'none'; if(hit) shown++;
     });
@@ -387,6 +450,30 @@
   function close(){document.body.classList.remove('open')}
   hamb.addEventListener('click',open); scrim.addEventListener('click',close);
   document.getElementById('collapse').addEventListener('click',()=>document.body.classList.toggle('collapsed'));
+
+  /* ---- login gate ---- */
+  const loginCard=document.getElementById('login-card'),
+        uEl=document.getElementById('u'), pEl=document.getElementById('p'),
+        errEl=document.getElementById('login-err');
+  function isAuthed(){ try{return sessionStorage.getItem('scp_auth')==='1';}catch(e){return false;} }
+  if(isAuthed()) document.body.classList.add('authed');
+  loginCard.addEventListener('submit',e=>{
+    e.preventDefault();
+    if(uEl.value.trim()===AUTH.user && pEl.value===AUTH.pass){
+      errEl.classList.remove('show');
+      try{sessionStorage.setItem('scp_auth','1');}catch(e){}
+      document.body.classList.add('authed');
+    } else {
+      errEl.classList.add('show');
+      loginCard.classList.remove('shake'); void loginCard.offsetWidth; loginCard.classList.add('shake');
+      pEl.value=''; pEl.focus();
+    }
+  });
+  document.getElementById('logout').addEventListener('click',()=>{
+    try{sessionStorage.removeItem('scp_auth');}catch(e){}
+    document.body.classList.remove('authed');
+    uEl.value=''; pEl.value=''; errEl.classList.remove('show'); location.hash=''; uEl.focus();
+  });
 
   /* ---- live local clock (auto-detects the viewer's time zone) ---- */
   const wclock=document.getElementById('wclock');
